@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Gestão Operacional | Prévia</title>
+  <style>
+    :root { --navy:#142c3f; --ink:#203445; --muted:#6e8090; --teal:#1e887b; --blue:#284e71; --gold:#b16a2d; --line:#dce5eb; --bg:#f2f6f8; }
+    * { box-sizing:border-box; }
+    body { margin:0; background:var(--bg); color:var(--ink); font-family:Segoe UI,Arial,sans-serif; }
+    .shell { max-width:1380px; min-height:100vh; margin:auto; background:var(--bg); }
+    header { background:var(--navy); border-left:8px solid #31b9a3; padding:24px 30px 26px; color:white; display:flex; justify-content:space-between; align-items:center; }
+    h1 { margin:0 0 7px; font-size:27px; letter-spacing:.04em; }
+    header p { margin:0; color:#bed2df; font-size:13px; }
+    .period { font-size:12px; letter-spacing:.12em; font-weight:700; color:#d9e8ef; }
+    main { padding:25px 28px 30px; }
+    .filters { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-bottom:19px; }
+    .filter { background:white; border:1px solid var(--line); border-radius:10px; padding:11px 14px; min-width:0; box-shadow:0 3px 12px #1b3d5708; }
+    .filter label { display:block; font-size:12px; font-weight:700; margin-bottom:8px; }
+    .filter select,.filter input { width:100%; border:1px solid var(--line); border-radius:7px; padding:8px; background:#fbfdfe; color:var(--ink); font:inherit; font-size:13px; }
+    .date-pair { display:flex; gap:7px; }
+    .date-pair input { min-width:0; }
+    .kpis { display:grid; grid-template-columns:repeat(5,1fr); gap:16px; margin-bottom:18px; }
+    .kpi,.panel { background:white; border:1px solid var(--line); border-radius:11px; box-shadow:0 4px 16px #1b3d570a; }
+    .kpi { padding:18px 19px 17px; min-height:111px; }
+    .kpi .label { color:var(--muted); font-weight:600; font-size:12px; min-height:29px; }
+    .kpi .value { font-size:29px; font-weight:750; letter-spacing:-.04em; color:var(--teal); white-space:nowrap; }
+    .kpi:nth-child(2) .value,.kpi:nth-child(4) .value { color:var(--blue); }
+    .kpi:nth-child(5) .value { color:var(--gold); }
+    .charts { display:grid; grid-template-columns:1fr 1fr; gap:18px; }
+    .panel { padding:17px 20px 15px; height:280px; overflow:hidden; }
+    .panel h2 { margin:0 0 8px; font-size:15px; }
+    .chart { width:100%; height:213px; }
+    svg text { font-family:Segoe UI,Arial,sans-serif; fill:#778896; font-size:11px; }
+    .legend { display:flex; gap:22px; align-items:center; font-size:12px; color:var(--muted); margin-top:-1px; }
+    .dot { display:inline-block; width:10px; height:10px; border-radius:50%; margin-right:6px; }
+    .team-rows { display:grid; gap:16px; margin-top:22px; }
+    .team-row { display:grid; grid-template-columns:80px 1fr 52px; gap:11px; align-items:center; font-size:13px; }
+    .track { height:16px; background:#e9f0f3; border-radius:99px; overflow:hidden; position:relative; }
+    .bar { height:100%; background:var(--teal); border-radius:99px; }
+    .bar.good { background:#36b69d; }
+    .bar.warn { background:#df9a55; }
+    .donut-layout { display:flex; align-items:center; justify-content:center; gap:34px; height:213px; }
+    .donut { width:176px; height:176px; border-radius:50%; flex:none; display:grid; place-items:center; }
+    .donut-inner { width:103px; height:103px; border-radius:50%; background:white; display:flex; flex-direction:column; align-items:center; justify-content:center; }
+    .donut-inner strong { font-size:19px; }
+    .donut-inner small { color:var(--muted); font-size:11px; }
+    .service-legend { display:grid; gap:13px; width:200px; font-size:12px; }
+    .service-legend div { display:flex; align-items:center; justify-content:space-between; gap:8px; }
+    .service-legend .name { display:flex; align-items:center; white-space:nowrap; }
+    footer { color:#8798a4; font-size:11px; margin-top:17px; text-align:right; }
+    @media (max-width:850px) { header { flex-direction:column; align-items:flex-start; gap:14px; } .filters { grid-template-columns:repeat(2,1fr); } .kpis { grid-template-columns:repeat(2,1fr); } .charts { grid-template-columns:1fr; } }
+    @media (max-width:520px) { main { padding:18px; } .filters { grid-template-columns:1fr; } .kpis { gap:10px; } .kpi { padding:13px; } .kpi .value { font-size:23px; } .donut-layout { gap:12px; } .donut { width:135px; height:135px; } .donut-inner { width:82px; height:82px; } }
+  </style>
+</head>
+<body>
+<div class="shell">
+  <header><div><h1>GESTÃO OPERACIONAL</h1><p>Produtividade, execução e desempenho · dados fictícios</p></div><div class="period">JAN 2025 — AGO 2026</div></header>
+  <main>
+    <section class="filters" aria-label="Filtros">
+      <div class="filter"><label>Período</label><div class="date-pair"><input id="start" type="date" aria-label="Data inicial"><input id="end" type="date" aria-label="Data final"></div></div>
+      <div class="filter"><label for="team">Equipe</label><select id="team"></select></div>
+      <div class="filter"><label for="service">Serviço</label><select id="service"></select></div>
+      <div class="filter"><label for="site">Local</label><select id="site"></select></div>
+    </section>
+    <section class="kpis">
+      <div class="kpi"><div class="label">Realizado</div><div class="value" id="kpi-realized"></div></div>
+      <div class="kpi"><div class="label">Meta</div><div class="value" id="kpi-target"></div></div>
+      <div class="kpi"><div class="label">% de cumprimento</div><div class="value" id="kpi-compliance"></div></div>
+      <div class="kpi"><div class="label">Produtividade (unid./h)</div><div class="value" id="kpi-productivity"></div></div>
+      <div class="kpi"><div class="label">Horas extras</div><div class="value" id="kpi-overtime"></div></div>
+    </section>
+    <section class="charts">
+      <article class="panel"><h2>Evolução mensal</h2><svg id="monthly" class="chart" viewBox="0 0 590 213" preserveAspectRatio="none" role="img" aria-label="Evolução mensal de meta e realizado"></svg><div class="legend"><span><i class="dot" style="background:#1e887b"></i>Realizado</span><span><i class="dot" style="background:#92afc3"></i>Meta</span></div></article>
+      <article class="panel"><h2>Meta x realizado por equipe</h2><svg id="comparison" class="chart" viewBox="0 0 590 213" preserveAspectRatio="none" role="img" aria-label="Meta e realizado por equipe"></svg><div class="legend"><span><i class="dot" style="background:#92afc3"></i>Meta</span><span><i class="dot" style="background:#1e887b"></i>Realizado</span></div></article>
+      <article class="panel"><h2>Desempenho por equipe</h2><div class="team-rows" id="teams"></div></article>
+      <article class="panel"><h2>Distribuição por serviço</h2><div class="donut-layout"><div class="donut" id="donut"><div class="donut-inner"><strong id="donut-total"></strong><small>realizados</small></div></div><div class="service-legend" id="services"></div></div></article>
+    </section>
+    <footer>Prévia interativa do projeto Power BI · cenário e dados fictícios</footer>
+  </main>
+</div>
+<script>
+const DATA = __DATA__;
+const TEAMS = ['Equipe A','Equipe B','Equipe C','Equipe D'];
+const SERVICES = ['Manutenção','Instalação','Inspeção','Atendimento'];
+const COLORS = ['#1e887b','#284e71','#d9a15b','#8aa5b9'];
+const n0 = new Intl.NumberFormat('pt-BR',{maximumFractionDigits:0});
+const n1 = new Intl.NumberFormat('pt-BR',{minimumFractionDigits:1,maximumFractionDigits:1});
+for (const [id,index] of [['team',2],['service',3],['site',8]]) {
+  const sel=document.getElementById(id);
+  sel.innerHTML='<option value="">Todos</option>'+[...new Set(DATA.map(r=>r[index]))].sort().map(v=>`<option>${v}</option>`).join('');
+}
+document.getElementById('start').value=DATA[0][0];
+document.getElementById('end').value=DATA[DATA.length-1][0];
+for (const el of document.querySelectorAll('input,select')) el.addEventListener('change',render);
+function sum(rows,i) { return rows.reduce((n,r)=>n+Number(r[i]),0); }
+function svgText(x,y,value,anchor='middle') {return `<text x="${x}" y="${y}" text-anchor="${anchor}">${value}</text>`;}
+function monthly(rows) {
+  const months=[...new Set(DATA.map(r=>r[1]))];
+  const buckets=months.map(m=>{const group=rows.filter(r=>r[1]===m);return [sum(group,4),sum(group,5)];});
+  const max=Math.max(1,...buckets.flat())*1.1, left=37, top=15, width=540, height=155;
+  const px=i=>left+(i/(months.length-1))*width, py=v=>top+height-(v/max)*height;
+  let html='';
+  for(let k=0;k<4;k++){const yy=top+k*height/3;html+=`<line x1="${left}" y1="${yy}" x2="${left+width}" y2="${yy}" stroke="#e8eef1"/>`+svgText(left-7,yy+3,n0.format(max*(1-k/3)),'end');}
+  const path=(column,color)=>`<polyline points="${buckets.map((v,i)=>`${px(i)},${py(v[column])}`).join(' ')}" fill="none" stroke="${color}" stroke-width="3" stroke-linejoin="round"/>`;
+  html+=path(0,'#92afc3')+path(1,'#1e887b');
+  for(let i=0;i<months.length;i+=3) html+=svgText(px(i),195,months[i]);
+  document.getElementById('monthly').innerHTML=html;
+}
+function comparison(rows) {
+  const groups=TEAMS.map(t=>{const r=rows.filter(x=>x[2]===t);return [sum(r,4),sum(r,5)];});
+  const max=Math.max(1,...groups.flat())*1.13,left=41,top=15,height=155;
+  let html='';
+  for(let k=0;k<4;k++){const yy=top+k*height/3;html+=`<line x1="${left}" y1="${yy}" x2="575" y2="${yy}" stroke="#e8eef1"/>`+svgText(left-6,yy+3,n0.format(max*(1-k/3)),'end');}
+  groups.forEach((g,i)=>{const cx=103+i*132;g.forEach((v,j)=>{const h=v/max*height;html+=`<rect x="${cx+j*31}" y="${top+height-h}" width="27" height="${h}" rx="3" fill="${j?'#1e887b':'#92afc3'}"/>`;});html+=svgText(cx+29,195,TEAMS[i]);});
+  document.getElementById('comparison').innerHTML=html;
+}
+function performance(rows) {
+  document.getElementById('teams').innerHTML=TEAMS.map(t=>{const r=rows.filter(x=>x[2]===t),target=sum(r,4),pct=target?sum(r,5)/target*100:0;return `<div class="team-row"><span>${t}</span><div class="track"><div class="bar ${pct>=100?'good':pct<80?'warn':''}" style="width:${Math.min(100,pct)}%"></div></div><strong>${n1.format(pct)}%</strong></div>`;}).join('');
+}
+function distribution(rows) {
+  const values=SERVICES.map(s=>sum(rows.filter(r=>r[3]===s),5)),total=values.reduce((a,b)=>a+b,0);
+  let p=0;const stops=values.map((v,i)=>{const start=p;p+=total?v/total*100:0;return `${COLORS[i]} ${start}% ${p}%`;});
+  document.getElementById('donut').style.background=total?`conic-gradient(${stops.join(',')})`:'#e9f0f3';
+  document.getElementById('donut-total').textContent=n0.format(total);
+  document.getElementById('services').innerHTML=SERVICES.map((s,i)=>`<div><span class="name"><i class="dot" style="background:${COLORS[i]}"></i>${s}</span><strong>${total?n1.format(values[i]/total*100):'0,0'}%</strong></div>`).join('');
+}
+function render() {
+  const start=document.getElementById('start').value,end=document.getElementById('end').value,team=document.getElementById('team').value,service=document.getElementById('service').value,site=document.getElementById('site').value;
+  const rows=DATA.filter(r=>r[0]>=start&&r[0]<=end&&(!team||r[2]===team)&&(!service||r[3]===service)&&(!site||r[8]===site));
+  const target=sum(rows,4),realized=sum(rows,5),hours=sum(rows,6)+sum(rows,7);
+  document.getElementById('kpi-realized').textContent=n0.format(realized);
+  document.getElementById('kpi-target').textContent=n0.format(target);
+  document.getElementById('kpi-compliance').textContent=n1.format(target?realized/target*100:0)+'%';
+  document.getElementById('kpi-productivity').textContent=n1.format(hours?realized/hours:0);
+  document.getElementById('kpi-overtime').textContent=n1.format(sum(rows,7));
+  monthly(rows);comparison(rows);performance(rows);distribution(rows);
+}
+render();
+</script>
+</body>
+</html>

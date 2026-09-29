@@ -1,0 +1,25 @@
+{
+  "name": "GestaoOperacional-20260928.json",
+  "dataColors": [
+    "#1E887B",
+    "#92AFC3",
+    "#D9A15B",
+    "#284E71",
+    "#8AA5B9"
+  ],
+  "background": "#FFFFFF",
+  "foreground": "#203445",
+  "tableAccent": "#1E887B",
+  "textClasses": {
+    "title": {
+      "fontFace": "Segoe UI Semibold",
+      "fontSize": 12,
+      "color": "#203445"
+    },
+    "label": {
+      "fontFace": "Segoe UI",
+      "fontSize": 10,
+      "color": "#6E8090"
+    }
+  }
+}

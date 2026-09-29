@@ -1,0 +1,5 @@
+relationship 889ac920-7414-4e19-9cb0-e77db32c3610
+	joinOnDateBehavior: datePartOnly
+	fromColumn: Operacao.Data
+	toColumn: LocalDateTable_51d293d7-6128-4238-b4cd-52af9da77373.Date
+
